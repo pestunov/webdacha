@@ -10,7 +10,7 @@ var MyChart = function (graph_contex, constrWidth, constrHeight) {
 	this.LEFT_SPACE = this.Y_TEXT_WIDTH+6;
 	this.TOP_SPACE = 10;
 	this.BOT_SPACE = 20;
-	this.RGHT_SPACE=5;
+	this.RGHT_SPACE=Math.round(this.X_TEXT_WIDTH/2);
 	this.MIN_HOR_GRID_SPACE=25;
 	this.MIN_VER_GRID_SPACE=25;
 	this.ctx.font="13px Arial";	this.ctx.textAlign="left";
@@ -31,7 +31,7 @@ var MyChart = function (graph_contex, constrWidth, constrHeight) {
 	this.xMin = 0;	//
 	this.xMax = 0;	//
 	this.xTickRange;
-	this.xGrid = 6;
+	this.xGrid = 8;
 	this.xStep;
 
 	this.xTickRangeDate;
@@ -43,39 +43,41 @@ var MyChart = function (graph_contex, constrWidth, constrHeight) {
 	
 /* styles */	
 	this.color = "rgba(0,120,0,0.5)";
+	this.chartType = "xDateTime";
+
 }
 
-MyChart.prototype._test = function(x){
-	var test = 15;
-	console.log('test was changed and now it is = '+test+' '+ x);
-	return test, 23, x;
-}
 MyChart.prototype._max = function(arr){
 	var res = -Infinity, i; 
 	for (i = 0; i < arr.length; i++){if (res < arr[i]) {res = arr[i];}}
-return res;
+	console.log(res);
+	return res;
 }
+
 MyChart.prototype._min = function(arr){
 	var res = Infinity, i;
 	for (i = 0; i < arr.length; i++){if (res > arr[i]) {res = arr[i];}}
-return res;
+	console.log(res);
+	return res;
 }
+
 MyChart.prototype._formatDate = function(data){	//transform int to string: 1986 -> '86' or 5 -> '05'
 	data+='';	// int to str
 	if (data.length == 1) return ('0'+data);
 	if (data.length == 4) return data.substr(2);
 	return data;
-}	
+}
+
 MyChart.prototype._drawLine = function(x0, y0, x1, y1, lWidth, lColor){
 	this.ctx.beginPath(); this.ctx.lineWidth=lWidth; this.ctx.lineJoin="round"; this.ctx.strokeStyle=lColor;
-	this.ctx.moveTo(x0,y0); this.ctx.lineTo(x1, y1); this.ctx.stroke();	
+	this.ctx.moveTo(x0,y0); this.ctx.lineTo(x1,y1); this.ctx.stroke();	
 }
+
 MyChart.prototype._getYRange = function(yData){
 	var gridMaxN, yTickSize, i, y;
 	var yMax = this._max(yData);
 	var yMin = this._min(yData);
-	// *** choose chart y grid size *** //
-	gridMaxN  = Math.ceil((this.height - this.TOP_SPACE - this.BOT_SPACE)/this.MIN_VER_GRID_SPACE);	// ceil = round to top
+	gridMaxN  = Math.ceil((this.height-this.TOP_SPACE-this.BOT_SPACE)/this.MIN_VER_GRID_SPACE);
 	if (gridMaxN > this.yGrid) {
 		for (i=this.yGrid; i <= gridMaxN; i++){
 			yTickSize = (yMax - yMin)/(i-1);
@@ -94,13 +96,13 @@ MyChart.prototype._getYRange = function(yData){
 
 }
 MyChart.prototype._getXRange = function(data){
-	var i, x;
+	var gridMaxN, xTickSize, i, x;
 	var xMax = this._max(data);
 	var xMin = this._min(data);
-	var gridMaxN  = Math.ceil((this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.X_TEXT_WIDTH + this.X_TEXT_SPACE));
+	gridMaxN  = Math.ceil((this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.X_TEXT_WIDTH + this.X_TEXT_SPACE));
 	if (gridMaxN > this.xGrid) {
 		for (i=this.xGrid; i <= gridMaxN; i++){
-			var xTickSize = (xMax - xMin)/(i-1);
+			xTickSize = (xMax - xMin)/(i-1);
 			x = Math.ceil(Math.log10(xTickSize)-1);
 			this.xTickRange = Math.ceil(xTickSize / Math.pow(10, x));
 			if ((this.xTickRange == 1) || (this.xTickRange == 2) || (this.xTickRange == 5) || (this.xTickRange == 10)){
@@ -187,13 +189,13 @@ MyChart.prototype.drawGrid = function(xData, yData, xText, yText){
 	for (i = 0; i <= this.yGrid; i++){
 		this._drawLine(this.LEFT_SPACE, this.yStep*i+this.TOP_SPACE,this.width-this.RGHT_SPACE, this.yStep*i+this.TOP_SPACE, 0.5, "#afafaf");
 		var stepAxis = this.yMax-i*this.yTickRange;
-		this.ctx.fillText(stepAxis.toPrecision(3),2,this.yStep*i+this.TOP_SPACE+3,this.LEFT_SPACE-6);	// text(toFixed(num_of_digits_after_comma)), x, y, width
+		this.ctx.fillText(stepAxis.toPrecision(4,1),2,this.yStep*i+this.TOP_SPACE+3,this.LEFT_SPACE-6);	// text(toFixed(num_of_digits_after_comma)), x, y, width
 	}
 	for (i = 0; i <= this.xGrid; i++){
 		this._drawLine(this.LEFT_SPACE+i*this.xStep, this.TOP_SPACE, this.LEFT_SPACE+i*this.xStep, this.height-this.BOT_SPACE, 0.5, "#afafaf");
 		var stepAxis = this.xMin+i*this.xTickRange;
 		var textWidth = this.ctx.measureText(stepAxis.toPrecision(3)).width;
-		this.ctx.fillText(stepAxis.toPrecision(3),this.LEFT_SPACE-textWidth/2+i*this.xStep,this.height-this.BOT_SPACE+15,this.X_TEXT_WIDTH);	// text(toFixed(num_of_digits_after_comma)), x, y, width
+		this.ctx.fillText(stepAxis.toPrecision(4,1),this.LEFT_SPACE-textWidth/2+i*this.xStep,this.height-this.BOT_SPACE+15,this.X_TEXT_WIDTH);	// text(toFixed(num_of_digits_after_comma)), x, y, width
 	}
 	this.ctx.textAlign = "end";
 	this.ctx.fillText(xText,this.width-this.RGHT_SPACE,this.height-this.BOT_SPACE-5);
@@ -206,12 +208,12 @@ MyChart.prototype.drawChartLine = function(xData, yData, lWidth, mColor){
 	var i, x, y, isPrevValid=false, isValid=false;
 	var masSize = xData.length;
 	var yScale = (this.height-this.TOP_SPACE-this.BOT_SPACE)/(this.yMax - this.yMin);
-	var xScale = (this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.xMax - this.xMin) //masSize;
+	var xScale = (this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.xMax - this.xMin);
 	
-	this.ctx.moveTo(this.LEFT_SPACE,(this.height-this.BOT_SPACE-(yData[0]-this.yMin)*yScale));	
-	for (i = 0; i < masSize; i++){
+	this.ctx.moveTo(this.LEFT_SPACE+xData[0]*xScale,(this.height-this.BOT_SPACE-yData[0]*yScale));	
+	for (i = 1; i < masSize; i++){
 		y = this.height-this.BOT_SPACE-(yData[i]-this.yMin)*yScale;  
-		x = this.LEFT_SPACE+xScale*(xData[i]-xData[0]);
+		x = this.LEFT_SPACE+xScale*(xData[i]-this.xMin);
 		isPrevValid = isValid;
 		isValid = yData[i] || (yData[i]==0);
 		if (isValid && !isPrevValid){this.ctx.moveTo(x, y);}
@@ -220,12 +222,12 @@ MyChart.prototype.drawChartLine = function(xData, yData, lWidth, mColor){
 	this.ctx.stroke();
 }
 
-MyChart.prototype.drawChartDot = function(xData, yData, dSize, Color){
-	this.ctx.fillStyle = Color;
+MyChart.prototype.drawChartDot = function(xData, yData, dSize, mColor){
+	this.ctx.fillStyle = mColor;
 	var i, x, y;
 	var masSize = xData.length;
 	var yScale = (this.height-this.TOP_SPACE-this.BOT_SPACE)/(this.yMax - this.yMin);
-	var xScale = (this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.xMax - this.xMin) //masSize;
+	var xScale = (this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.xMax - this.xMin);
 	for (i = 0; i < masSize; i++){
 		y = this.height-this.BOT_SPACE-(yData[i]-this.yMin)*yScale;  
 		x = this.LEFT_SPACE+xScale*(xData[i]-this.xMin);
@@ -238,7 +240,7 @@ MyChart.prototype.drawChartPolygon = function(xData, yData1, yData2, mColor){
 	var i, x, y;
 	var masSize = xData.length;
 	var yScale = (this.height-this.TOP_SPACE-this.BOT_SPACE)/(this.yMax - this.yMin);
-	var xScale = (this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.xMax - this.xMin) //masSize;
+	var xScale = (this.width-this.LEFT_SPACE-this.RGHT_SPACE)/(this.xMax - this.xMin);
 	this.ctx.moveTo(this.LEFT_SPACE,(this.height-this.BOT_SPACE-(yData1[0]-this.yMin)*yScale));	
 	for (i = 0; i < masSize; i++){
 		y = this.height-this.BOT_SPACE-(yData1[i]-this.yMin)*yScale;  
