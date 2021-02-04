@@ -1,4 +1,6 @@
 from flask import Flask, render_template, url_for
+import os
+import sqlite3
 
 
 myPorts = {
@@ -8,8 +10,15 @@ myPorts = {
     27: {'name': 'Water Level', 'portDir': 'in', 'state': 'low'}
     }
 
+# config const
+DATABASE = '/tmp/units.db'
+DEBUG = True
+SECRET_KEY = 'kgjdk?R$ghdk>jkljvvetr3240rfd'
 
 app = Flask(__name__)
+app.config.from_object(__name__)
+app.config.update(dict(DATABASE=os.path.join(app.root_path,'units.db')))
+
 
 @app.route('/')
 @app.route('/index/')
