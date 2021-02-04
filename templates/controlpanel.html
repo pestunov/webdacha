@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<p align = "center"> remote control </p>
+	{% for pin in ports %}
+		<input class="button" type="button" value=" {{ ports[pin].name }} ">
+	{% endfor %}
+
+{{ super() }}
+
+{% endblock %}
