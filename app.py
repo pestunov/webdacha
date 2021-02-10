@@ -1,35 +1,40 @@
 from flask import Flask, render_template, url_for
 import os
 import sqlite3
+import dachadb
 
-
-myPorts = {
-    24: {'name': 'Теплица Свет', 'portDir': 'out', 'state': 'low'},
-    25: {'name': 'Teplica Cvet', 'portDir': 'out', 'state': 'high'},
-    23: {'name': 'Teplica', 'portDir': 'out', 'state': 'high'},
-    27: {'name': 'Water Level', 'portDir': 'in', 'state': 'low'}
-    }
 
 # config const
 DATABASE = '/tmp/units.db'
 DEBUG = True
-SECRET_KEY = 'kgjdk?R$ghdk>jkljvvetr3240rfd'
+SECRET_KEY = 'kgjdk?R$ghdk>jkljvv4etr3240rfd'
+CATEGORIES_INIT = ['security', 'luminos', 'ferma']
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path,'units.db')))
 
 
+
 @app.route('/')
 @app.route('/index/')
 def index():
     print(url_for('index'))
-    return render_template('index.html')
+    return render_template('index.html',
+                           menu = 'Home')
 
 @app.route('/control/')
 def controlpanel():
+    print(url_for('controlpanel'))
+    cols = ['unit_name','unit_category','unit_desc']
+    units = dachadb.selectFromDB('units.db3','units',cols )
+    tree = {'security':['perimeter', 'lockers'],
+            'luminos':['home', 'garden'],
+            'ferma':['feed Cat', 'feed Bunny']}
     return render_template('controlpanel.html',
-                           ports = myPorts)
+                           units = units,
+                           tree = tree,
+                           menu = 'Control panel')
 
 @app.route('/dop/')
 def index1():
@@ -39,4 +44,4 @@ def index1():
 if __name__ == '__main__':
     app.run(debug=True, port=5003, host='0.0.0.0')
 
-    
+

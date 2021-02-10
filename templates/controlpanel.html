@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
-
-{% block content %}
-
-	<p align = "center"> remote control </p>
-	{% for pin in ports %}
-		<input class="button" type="button" value=" {{ ports[pin].name }} ">
-	{% endfor %}
-
 {{ super() }}
 
+{% block content %}
+	<div class="button-block">
+	{% for unit in units %}
+		<input class="button" type="button" value=" {{ unit.unit_name }} ">
+	{% endfor %}
+	</div>
+	<hr>
+	<p> Hello world </p>
+	<hr>
+	<div class="box-cat">
+	{% for key, val in tree.items() %}
+		<div class="box-cat-cap">
+			<p> {{ key }}</p>
+			{% for but in val %}
+				<p> {{ but }}</p>
+			{% endfor %}
+		</div>
+	{% endfor %}
+	</div> 
 {% endblock %}
