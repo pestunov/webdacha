@@ -9,6 +9,7 @@ class UnitBase():
     def __init__(self, name, cat):
         self.name = name
         self.catList = [cat]
+        self.view = None
         pass
     
     def __del__(self):

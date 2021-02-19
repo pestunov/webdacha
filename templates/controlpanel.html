@@ -2,12 +2,6 @@
 {{ super() }}
 
 {% block content %}
-	<div class="button-block">
-	{% for unit in units %}
-		<input class="button" type="button" value=" {{ unit.unit_name }} ">
-	{% endfor %}
-	</div>
-	<hr>
 	{% for key, val in tree.items() %}
 	<div class="box__cat">
 		<div class="box__catcap">
@@ -15,7 +9,14 @@
 		</div>
 		<div class="box__catbut">
 			{% for but in val %}
-				<input class="button" type="button" value=" {{ but }} ">
+				<div class="button">{{ key }} {{ but }}</div>
+				<button class="collapsible" type="button"> {{ but }} </button>
+				<div class="content">
+					<p> -- commodo consequat -- </p>
+					<button class="collapsible_in" type="button"> {{ but }}-close </button>
+
+				</div>
+
 			{% endfor %}
 		</div>
 	</div> 
