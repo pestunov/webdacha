@@ -2,4 +2,7 @@
 .venv/
 .vscode
 .vscode/
+__*__
+__*__/
+*.db3
 
