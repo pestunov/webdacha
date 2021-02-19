@@ -2,5 +2,34 @@
 
 {% block content %}
 {{ super() }}
-<p align = "center"> index page </p>
+<p align = "center"> Tyndex page </p>
+<style>
+.dot {
+  height: 15px;
+  width: 15px;
+  background-color: lime;
+  border: 2px solid green;
+  border-radius: 50%;
+  display: inline-block;
+  -moz-box-shadow:0 0 10px #050;
+  -webkit-box-shadow:0 0 10px #050;
+  box-shadow:0 0 20px #0F0;
+}
+</style>
+<div style="text-align:center">
+	<span class="dot"></span>
+</div>
+<style>
+.dot1 {
+  height: 15px;
+  width: 15px;
+  background-color: #151;
+  border: 2px solid green;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
+<div style="text-align:center">
+	<span class="dot1"></span>
+</div>
 {% endblock %}

@@ -44,35 +44,23 @@
 	background: #DBCEC7;
 }
 
-.box-cat{
-	display: flex;
-	margin: 20px;
-	padding: 5px;
-	background: #FFFF00;
+.box__cat{
+	margin: 0px 0px 10px 0px;
 	border: 2px solid #6B4C0B;
 	border-radius: 5px;
-}
-
-.box-cat-cap{
+	padding: 5px;
+	background: #F0F0F0;
 	font-family: 'Nunito', sans-serif;
 	font-weight: 700;
-	margin: 20px;
-	padding: 5px;
-	background: #DFDF00;
-	border: 2px solid #6B4C0B;
-	border-radius: 5px;
+	font-size: 1em;
+	color: #00A00F;
 }
 
-.box-cat-but{
-	font-family: 'Nunito', sans-serif;
-	font-weight: 300;
-	font-size: 15px;
-	color: #000;
+.box__catcap {
+	margin: 0 0 0 10px;
+}
 
-	padding: 10px 10px;
-	margin: 10px auto;
-	background: #DBCECF;
-
+.box__catbut{
 }
 
 .button-block{
@@ -117,6 +105,8 @@ p{
 	color: #FFFFFF;
 	font-size: 1em;
 	text-align: center;
+	height: 100px;
+	width: 150px;
 }
 
 .button:hover{
@@ -138,5 +128,8 @@ footer{
 	background: #636164;
 	color: #FFFFFF;
 
+}
+hr {
+	margin: 2px 100px;
 }
 

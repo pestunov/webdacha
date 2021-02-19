@@ -8,16 +8,16 @@
 	{% endfor %}
 	</div>
 	<hr>
-	<p> Hello world </p>
-	<hr>
-	<div class="box-cat">
 	{% for key, val in tree.items() %}
-		<div class="box-cat-cap">
-			<p> {{ key }}</p>
+	<div class="box__cat">
+		<div class="box__catcap">
+		{{ key }}
+		</div>
+		<div class="box__catbut">
 			{% for but in val %}
-				<p> {{ but }}</p>
+				<input class="button" type="button" value=" {{ but }} ">
 			{% endfor %}
 		</div>
-	{% endfor %}
 	</div> 
+	{% endfor %}
 {% endblock %}

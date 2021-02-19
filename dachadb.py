@@ -6,30 +6,65 @@ to allow one time access to each table
 
 import sqlite3 as sq
 
-def createDBUnits():
-    with sq.connect('units.db3') as con:
-        cur = con.cursor()
-        cur.execute("""DROP TABLE IF EXISTS units""")
-        cur.execute("""CREATE TABLE IF NOT EXISTS units (
-            my_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            unit_id INTEGER NOT NULL,
-            unit_name TEXT NOT NULL,
-            unit_category TEXT NULL DEFAULT NULL,
-            unit_desc TEXT(65535) NULL DEFAULT NULL
-            );""")
+DBUNITS = 'units_1.db3'
+DBUSERS = 'users.db3'
 
-def createDBUsers():
-    with sq.connect('users.db3') as con:
+
+def createDBUnits_1():
+    with sq.connect(DBUNITS) as con:
         cur = con.cursor()
-        cur.execute("""DROP TABLE IF EXISTS users""")
-        cur.execute("""CREATE TABLE IF NOT EXISTS users (
-            my_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            user_name TEXT NOT NULL,
-            user_login TEXT NOT NULL,
-            user_pwhash TEXT NOT NULL,
-            user_privelege TEXT NULL DEFAULT NULL
+        cur.execute("""DROP TABLE IF EXISTS units;""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS units (
+            count_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            unit_id INTEGER DEFAULT NULL,
+            unit_name TEXT DEFAULT NULL,
+            unit_adr TEXT DEFAULT NULL,
+            unit_port TEXT DEFAULT NULL,
+            unit_status INT DEFAULT 0,
+            cat_id INTEGER NOT NULL DEFAULT 100,
+            cat_aux TEXT NULL DEFAULT NULL,
+            unit_func TEXT NULL DEFAULT NULL,
+            unit_desc TEXT NULL DEFAULT NULL
             );""")
+        cur.execute("""INSERT INTO units
+            (unit_id, unit_name, unit_adr, unit_port, unit_status,
+            cat_id, unit_func, unit_desc) VALUES
+            ('1', 'gpio14', 'gpio','14' ,1,
+            1,'readPin','embeded sensor')
+            ;""")
+        cur.execute("""INSERT INTO units
+            (unit_id, unit_name, unit_adr, unit_port, unit_status,
+            cat_id, unit_func, unit_desc) VALUES
+            ('2', 'gpio15', 'gpio','15' ,1,
+            1,'readPin','embeded sensor')
+            ;""")
+
+
+def createDBCats_1():
+    with sq.connect(DBUNITS) as con:
+        cur = con.cursor()
+        cur.execute("""DROP TABLE IF EXISTS cats;""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS cats (
+            cat_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cat_name TEXT NOT NULL,
+            cat_units TEXT NULL DEFAULT NULL,
+            cat_desc TEXT NULL DEFAULT NULL
+            );""")
+        cur.execute("""INSERT INTO cats
+            (cat_name, cat_desc) VALUES
+            ('security', 'all about your safety')
+            ;""")
+        cur.execute("""INSERT INTO cats
+            (cat_name, cat_desc) VALUES
+            ('luminos', 'all about luminosity of your latifundia')
+            ;""")
+        cur.execute("""INSERT INTO cats
+            (cat_name, cat_desc) VALUES
+            ('ferma', 'takes care about your garden')
+            ;""")
+
+def getUnitsList():
+    return selectFromDB(DBUNITS,'units',['unit_name', 'unit_adr'])
 
 
 def selectFromDB(db,table,cols = ['*'], cond = None):
@@ -42,7 +77,7 @@ def selectFromDB(db,table,cols = ['*'], cond = None):
             cond = 'WHERE '+ cond
         else:
             cond = ''
-        sql = "SELECT {cl} FROM {tn} {cond}".format(cl=colStr,
+        sql = "SELECT {cl} FROM {tn} {cond};".format(cl=colStr,
                                                     tn=table,
                                                     cond=cond)
         cur.execute(sql)
@@ -59,11 +94,12 @@ def insertToDB(db,table,cols,vals):
         cur = con.cursor()
         colStr = ','.join(cols)
         valStr = ','.join(vals)
-        sql = "INSERT INTO {tn} ({col}) values ({val})".format(tn=table,
+        sql = "INSERT INTO {tn} ({col}) values ({val});".format(tn=table,
                                                                col=colStr,
                                                                val=valStr)
         cur.execute(sql)
         return 1
+
 
 def getCategories(catInit):
     if catInit == None:
@@ -72,11 +108,24 @@ def getCategories(catInit):
     for item in cats:
         print(item.values())
     pass
-        
-    
+
+
+def createDBUsers():
+    with sq.connect(DBUSERS) as con:
+        cur = con.cursor()
+        cur.execute("""DROP TABLE IF EXISTS users;""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS users (
+            my_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            user_name TEXT NOT NULL,
+            user_login TEXT NOT NULL,
+            user_pwhash TEXT NOT NULL,
+            user_privelege TEXT NULL DEFAULT NULL
+            );""")
+
 
 if __name__ == "__main__":
-#   createDBUnits()
-#   createDBUsers()
+    createDBUnits_1()
+    createDBCats_1()
     pass
 

@@ -1,6 +1,7 @@
 import socket
 import time
 import random
+import dachadb
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -15,6 +16,8 @@ print("Listening on " + server_address + ":" + str(server_port))
 
 got_data = False
 command = 1
+unitsList = dachadb.getUnitsList();
+print(unitsList)
 while(True):
     
     try:
@@ -27,8 +30,8 @@ while(True):
     if got_data:
         got_data = False
         message = str(message)
-        print('Got message from address {}: {}'.format (str(client_address), message))
+        print('Got message from address {}: {}'.format(str(client_address), message))
         sock.sendto(b'unit001.1.1',client_address)
-        time.sleep(0.3)
+        time.sleep(3)
         sock.sendto(b'unit001.1.0',client_address)
-        time.sleep(0.3)
+        time.sleep(3)

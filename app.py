@@ -5,10 +5,9 @@ import dachadb
 
 
 # config const
-DATABASE = '/tmp/units.db'
+DATABASE = dachadb.DBUNITS
 DEBUG = True
 SECRET_KEY = 'kgjdk?R$ghdk>jkljvv4etr3240rfd'
-CATEGORIES_INIT = ['security', 'luminos', 'ferma']
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -29,8 +28,8 @@ def controlpanel():
     cols = ['unit_name','unit_category','unit_desc']
     units = dachadb.selectFromDB('units.db3','units',cols )
     tree = {'security':['perimeter', 'lockers'],
-            'luminos':['home', 'garden'],
-            'ferma':['feed Cat', 'feed Bunny']}
+            'luminos':['home', 'garden', 'entrance'],
+            'ferma':['feed Cat', 'feed Bunny', 'feed Fish']}
     return render_template('controlpanel.html',
                            units = units,
                            tree = tree,
