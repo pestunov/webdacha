@@ -4,18 +4,15 @@
 {% block content %}
 	{% for key, val in tree.items() %}
 	<div class="box__cat">
-		<div class="box__catcap">
-		{{ key }}
+		<div class="box__cat_cap">
+			{{ key }}
 		</div>
-		<div class="box__catbut">
+		<div class="box__cat_but_box">
 			{% for but in val %}
-				<div class="button">{{ key }} {{ but }}</div>
-				<button class="collapsible" type="button"> {{ but }} </button>
-				<div class="content">
+				<div class="mybut"> {{ but }} </div>
+				<!--div class="content">
 					<p> -- commodo consequat -- </p>
-					<button class="collapsible_in" type="button"> {{ but }}-close </button>
-
-				</div>
+				</div-->
 
 			{% endfor %}
 		</div>
