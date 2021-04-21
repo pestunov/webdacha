@@ -1,7 +1,7 @@
-''' Rountines kit for create/read/modify data bases and tebles
+''' Rountines kit for create/read/modify data bases and tables
 
 Since we use sqlite3 so let's make all tables in separate file
-to allow one time access to each table
+to allow write to each table simultaneously
 '''
 
 import sqlite3 as sq
@@ -10,7 +10,7 @@ DBUNITS = 'units_1.db3'
 DBUSERS = 'users.db3'
 
 
-def createDBUnits_1():
+def createDBUnits():
     with sq.connect(DBUNITS) as con:
         cur = con.cursor()
         cur.execute("""DROP TABLE IF EXISTS units;""")
@@ -40,7 +40,7 @@ def createDBUnits_1():
             ;""")
 
 
-def createDBCats_1():
+def createDBCats():
     with sq.connect(DBUNITS) as con:
         cur = con.cursor()
         cur.execute("""DROP TABLE IF EXISTS cats;""")
@@ -125,7 +125,7 @@ def createDBUsers():
 
 
 if __name__ == "__main__":
-    createDBUnits_1()
-    createDBCats_1()
+    createDBUnits()
+    createDBCats()
     pass
 

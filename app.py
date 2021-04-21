@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for
 import os
 import sqlite3
-import dachadb
+import dachadb, dachacogitare
 
 
 # config const
@@ -12,7 +12,6 @@ SECRET_KEY = 'kgjdk?R$ghdk>jkljvv4etr3240rfd'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path,'units.db')))
-
 
 
 @app.route('/')
@@ -26,8 +25,9 @@ def index():
 def controlpanel():
     print(url_for('controlpanel'))
     cols = ['unit_name','unit_category','unit_desc']
-    units = dachadb.selectFromDB('units.db3','units',cols )
-    tree = {'security':['perimeter', 'lockers'],
+    units = dachadb.selectFromDB('units.db3','units', cols)
+    print(units)
+    tree = {'security':['perimeter', 'lockers', 'fenestra', 'porta'],
             'luminos':['home', 'garden', 'entrance'],
             'ferma':['feed Cat', 'feed Bunny', 'feed Fish']}
     return render_template('controlpanel.html',

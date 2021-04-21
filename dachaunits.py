@@ -6,14 +6,18 @@ INIT_CATECORIES = ['security', 'luminos', 'ferma', 'meteo']
 
 class UnitBase():
     """ Base class for all units """
-    def __init__(self, name, cat):
+    def __init__(self, name, cat, idNum=0):
         self.name = name
-        self.catList = [cat]
+        self.id = idNum
+        if type(cat) is list:
+            self.cat = cat
+        elif type(cat) is str:
+            self.cat = [cat]
         self.view = None
-        pass
-    
+
+
     def __del__(self):
-        print('object \'{name}\' deleted'.format(name=self.name))
+        print('object \'{name}\' deleted. Test message'.format(name=self.name))
 
     def getState(self):
         pass
@@ -31,13 +35,19 @@ class UnitBase():
         self.name = _name
     
     def addToCatList(self,_cat):
-        if _cat not in self.catList:
-            self.catList.append(_cat)
+        if _cat not in self.cat:
+            self.cat.append(_cat)
         
     def remFromCatList(self,_cat):
-        self.catList = [_x for _x in self.catList if _x != _cat]
+        self.cat = [_x for _x in self.cat if _x != _cat]
         
-
+    def txDataToUnit(self, _data):
+        pass
+    
+    def rxDataFromUnit(self, _data):
+        pass
+    
+    
 class UnitWiredPerimeter(UnitBase):
     """Class for security objects.
     Wired perimeter """
@@ -50,6 +60,7 @@ class UnitWiredPerimeter(UnitBase):
             print("no such port. GPIO0 will be connected")
             self.pin = 0
         self.port = Button(self.pin)
+        print(self.cat)
         
     def getState(self):
         return self.port.is_pressed
@@ -57,7 +68,7 @@ class UnitWiredPerimeter(UnitBase):
             
   
 def tests():
-    u1 = UnitWiredPerimeter(name = 'perimeter1', pin = 18)
+    u1 = UnitWiredPerimeter(name='perimeter1', cat=['security', 'garden'], pin=18)
     unitsList = []
     unitsList.append(u1)
     for u in unitsList:
